@@ -1,4 +1,5 @@
 #include "ftl.h"
+#include "record_lpn.h"
 
 //#define FEMU_DEBUG_FTL
 
@@ -14,8 +15,21 @@ static inline bool should_gc_high(struct ssd *ssd)
     return (ssd->lm.free_line_cnt <= ssd->sp.gc_thres_lines_high);
 }
 
+// static inline void record_lpn(uint64_t lpn){
+//     FILE *fp = fopen("/home/quieoo/ftl/trace/femu", "a");
+//     if (fp != NULL) {
+//         fprintf(fp, "%lx\n", lpn);
+//         fclose(fp);
+//     } else {
+//         perror("Failed to open LPN log file");
+//     }
+// }
+
 static inline struct ppa get_maptbl_ent(struct ssd *ssd, uint64_t lpn)
 {
+    // record_lpn(lpn);
+    // recorder_add_lpn(&recorder, lpn);
+    add_lpn(ssd->rec, lpn);
     return ssd->maptbl[lpn];
 }
 
@@ -348,6 +362,9 @@ static void ssd_init_maptbl(struct ssd *ssd)
     for (int i = 0; i < spp->tt_pgs; i++) {
         ssd->maptbl[i].ppa = UNMAPPED_PPA;
     }
+
+    Recorder *rec = init_recorder();
+    ssd->rec=rec;
 }
 
 static void ssd_init_rmap(struct ssd *ssd)
