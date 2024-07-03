@@ -46,6 +46,12 @@ void write_to_file(Recorder *rec) {
     // printf("Writing %d LPNs to file\n", rec->count);
     // time_t now = time(NULL);
     // struct tm *tm = localtime(&now);
+
+    
+    // for (int i = 0; i < rec->count; i++) {
+    //     fprintf(file, "%04d-%02d-%02d %02d:%02d:%02d %lu\n", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec, rec->lpns[i]);
+    // }
+    
     FILE *file = fopen("/home/quieoo/ftl/trace/femu", "a");
     if (!file) {
         perror("Failed to open file");
@@ -54,9 +60,6 @@ void write_to_file(Recorder *rec) {
     // 将lpn数组中的数据批量写入文件，每个lpn占据8字节
     fwrite(rec->lpns, sizeof(__uint64_t), rec->count, file);
 
-    // for (int i = 0; i < rec->count; i++) {
-    //     fprintf(file, "%04d-%02d-%02d %02d:%02d:%02d %lu\n", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec, rec->lpns[i]);
-    // }
 
     fflush(file); // 同步缓冲区
     fclose(file);
